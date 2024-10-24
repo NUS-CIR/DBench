@@ -36,20 +36,20 @@ go get github.com/google/gopacket/pcap
 - If you want to get RU delay:
   - Uplink data:
   ```sh
-  go run match.go -pcap=<path_to_ue_pcap> -request -smaller -find_ru
+  go run match.go -pcap ../../data/eval1/raw/ue.pcap -request -smaller -find_ru
   ```
   - Downlink data:
   ```sh
-  go run match.go -pcap=<path_to_ue_pcap> -response -find_ru
+  go run match.go -pcap ../../data/eval1/raw/ue.pcap -response -find_ru
   ```
 - If you want DU delay instead:
   - Uplink data:
   ```sh
-  go run match.go -pcap=<path_to_switch_pcap> -request
+  go run match.go -pcap ../../data/eval1/raw/sw.pcap -request
   ```
   - Downlink data:
   ```sh
-  go run match.go -pcap=<path_to_switch_pcap> -response -smaller
+  go run match.go -pcap ../../data/eval1/raw/sw.pcap -response -smaller
   ```
 
 #### Details

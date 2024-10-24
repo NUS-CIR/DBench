@@ -111,7 +111,7 @@ func parsePacket(index int, packet gopacket.Packet, wg *sync.WaitGroup, results 
 }
 
 func main() {
-	handle, err := pcap.OpenOffline("../../data/eval1/raw/OAI-RU-caelus-DL-enc.pcap")
+	handle, err := pcap.OpenOffline("../../data/eval1/raw/ru.pcap")
 	if err != nil {
 		log.Fatal(err)
 	}
