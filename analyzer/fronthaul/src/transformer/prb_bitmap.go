@@ -111,7 +111,7 @@ func parsePacket(index int, packet gopacket.Packet, wg *sync.WaitGroup, results 
 }
 
 func main() {
-	handle, err := pcap.OpenOffline("../../data/eval1/raw/OAI-RU-caelus-10-1000byte.pcap")
+	handle, err := pcap.OpenOffline("../../data/eval1/raw/OAI-RU-caelus-DL-enc.pcap")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -174,7 +174,7 @@ func main() {
 			return packets[i].startSymbolID < packets[j].startSymbolID
 		})
 
-		fileName := fmt.Sprintf("../../data/eval1/prb_bitmaps/frame_%d.csv", frameID)
+		fileName := fmt.Sprintf("../../data/prb_bitmaps/frame_%d.csv", frameID)
 		file, err := os.Create(fileName)
 		if err != nil {
 			log.Fatal("Cannot create file", err)

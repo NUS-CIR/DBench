@@ -5,31 +5,31 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"os"
-	"strconv"
 	"math"
+	"os"
 	"sort"
+	"strconv"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
 )
+
 // Normal case
 
+/*
 const (
 	IP_EXT = "192.168.1.9"
 	IP_UE  = "192.168.1.3"
 )
-
-
-// Eval 1
-/*
-const (
-        IP_EXT = "192.168.1.9"
-        IP_UE  = "192.168.69.195"
-)
 */
 
+// Eval 1
+
+const (
+	IP_EXT = "192.168.1.9"
+	IP_UE  = "192.168.69.195"
+)
 
 type PacketInfo struct {
 	TimestampMS float64
@@ -131,7 +131,7 @@ func findClosestTimestamp(candidate float64, packets []PacketInfo, findSmaller b
 
 func main() {
 	pcapFile := flag.String("pcap", "file.pcap", "Path to the pcap file")
-	csvFile := flag.String("csv", "../fronthaul/result/tstamp/candidate.csv", "Path to the CSV file with candidate timestamps")
+	csvFile := flag.String("csv", "../../data/candidate/candidate.csv", "Path to the CSV file with candidate timestamps")
 	filterRequest := flag.Bool("request", false, "Filter only ICMP requests")
 	filterResponse := flag.Bool("response", false, "Filter only ICMP responses")
 	findSmaller := flag.Bool("smaller", false, "Find the closest smaller timestamp (default expect bigger tstamp at UE)")
@@ -170,52 +170,52 @@ func main() {
 
 	fmt.Println("Differences within range:")
 	// Calculate percentiles
-    	if len(results) > 0 {
-        	p25 := percentile(results, 25)
-        	p50 := percentile(results, 50)
-        	p75 := percentile(results, 75)
+	if len(results) > 0 {
+		p25 := percentile(results, 25)
+		p50 := percentile(results, 50)
+		p75 := percentile(results, 75)
 
-        	fmt.Println("Percentiles:")
-       		fmt.Printf("25th Percentile: %.2f\n", p25)
-        	fmt.Printf("50th Percentile: %.2f\n", p50)
-        	fmt.Printf("75th Percentile: %.2f\n", p75)
-    	} else {
-        	fmt.Println("No results within the specified range.")
-    	}
+		fmt.Println("Percentiles:")
+		fmt.Printf("25th Percentile: %.2f\n", p25)
+		fmt.Printf("50th Percentile: %.2f\n", p50)
+		fmt.Printf("75th Percentile: %.2f\n", p75)
+	} else {
+		fmt.Println("No results within the specified range.")
+	}
 
 	// Save results to a CSV file
-   	 file, err := os.Create(*outputloc)
-    	if err != nil {
-        	fmt.Println("Error creating file:", err)
-        	return
-    	}
-    	defer file.Close()
+	file, err := os.Create(*outputloc)
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer file.Close()
 
-    	writer := csv.NewWriter(file)
-    	defer writer.Flush()
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
 
-    	for _, value := range results {
-        	err := writer.Write([]string{strconv.FormatFloat(value, 'f', -1, 64)})
-        	if err != nil {
-            		fmt.Println("Error writing to file:", err)
-            		return
-        	}
-    	}
-    	fmt.Println("Results saved to %s", *outputloc)
+	for _, value := range results {
+		err := writer.Write([]string{strconv.FormatFloat(value, 'f', -1, 64)})
+		if err != nil {
+			fmt.Println("Error writing to file:", err)
+			return
+		}
+	}
+	fmt.Println("Results saved to %s", *outputloc)
 
 }
 
 // Function to calculate the percentile
 func percentile(data []float64, p float64) float64 {
-    k := (p / 100) * float64(len(data)-1)
-    f := math.Floor(k)
-    c := math.Ceil(k)
+	k := (p / 100) * float64(len(data)-1)
+	f := math.Floor(k)
+	c := math.Ceil(k)
 
-    if f == c {
-        return data[int(k)]
-    }
+	if f == c {
+		return data[int(k)]
+	}
 
-    d0 := data[int(f)] * (c - k)
-    d1 := data[int(c)] * (k - f)
-    return d0 + d1
+	d0 := data[int(f)] * (c - k)
+	d1 := data[int(c)] * (k - f)
+	return d0 + d1
 }

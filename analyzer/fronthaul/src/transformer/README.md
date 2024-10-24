@@ -35,7 +35,7 @@ Ensure Python 3 is installed.
     > TODO: Enable specify input file in arguments, while now it is inline
 
     **Output**:  
-    This script generates `frame_[XX].csv` containing the extracted PRB data in `../../data/eval1/prb_bitmaps/`
+    This script generates `frame_[XX].csv` containing the extracted PRB data in `../../data/prb_bitmaps/`
 
 
 2. **Handle Frame Wrap-Arounds**: To sort PRB data across multiple frame cycles, use the Python script:  
@@ -46,4 +46,4 @@ Ensure Python 3 is installed.
     ```
 
     **Output**:  
-    This script generates `[frame number]_[iteration idx].csv` containing the extracted PRB data in `../../data/eval1/prb_bitmaps/split/`
+    This script generates `[frame number]_[iteration idx].csv` containing the extracted PRB data in `../../data/prb_bitmaps/split/`

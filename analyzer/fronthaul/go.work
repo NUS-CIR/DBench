@@ -1,7 +1,7 @@
 go 1.21.5
 
 use (
-	./extractor
-	./inspector
-	./transformer
+	src/extractor
+	src/inspector
+	src/transformer
 )

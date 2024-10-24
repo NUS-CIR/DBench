@@ -27,7 +27,7 @@ def split_csv(file_path, output_dir):
             writer.writerows(rows)
 
 def main():
-    input_dir = '../../data/eval1/prb_bitmaps/'
+    input_dir = '../../data/prb_bitmaps/'
     output_dir = os.path.join(input_dir, 'split')
     os.makedirs(output_dir, exist_ok=True)
     

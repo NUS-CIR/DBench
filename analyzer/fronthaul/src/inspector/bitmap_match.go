@@ -12,28 +12,27 @@ import (
 	"sync"
 )
 
-type StackPlatform int
+type StackPlatform string
 
 const (
-	srs StackPlatform = iota
-	oai
-	vari
-	eval1_oai_dl
-	eval1_oai_ul
-	eval1_srs_dl
-        eval1_srs_ul
-	eval3_oai_dl
-	eval3_oai_ul
-	eval3_data_ul_srs_dl
-	eval3_data_ul_srs_ul
+	SRS                  = "srs"
+	OAI                  = "oai"
+	vari                 = "vari"
+	eval1_oai_dl         = "eval1_oai_dl"
+	eval1_oai_ul         = "eval1_oai_ul"
+	eval1_srs_dl         = "eval1_srs_dl"
+	eval1_srs_ul         = "eval1_srs_ul"
+	eval3_oai_dl         = "eval3_oai_dl"
+	eval3_oai_ul         = "eval3_oai_ul"
+	eval3_data_ul_srs_dl = "eval3_data_ul_srs_dl"
+	eval3_data_ul_srs_ul = "eval3_data_ul_srs_ul"
 )
 
 const (
 	K              = 20
 	symbolPerFrame = 280
 	prbPerSymbol   = 273
-	platform       = eval1_srs_dl
-	spectrum       = 40
+	platform       = OAI
 )
 
 type Entry struct {
@@ -204,35 +203,9 @@ func insertTopK(entries []Entry, newEntry Entry) []Entry {
 func main() {
 	var templateEven [][]string
 	var err error
-	spectrum := strconv.Itoa(spectrum) + "mhz"
 	var fname string
 
-	if platform == srs {
-		fname = "../fronthaul/result/ref/srs/" + spectrum + "/frame_even.csv"
-	} else if platform == oai {
-		fname = "../fronthaul/result/ref/oai/" + spectrum + "/frame_even.csv"
-	} else if platform == vari {
-		fname = "../fronthaul/result/ref/var/" + spectrum + "/frame_even.csv"
-	} else if platform == eval1_oai_dl {
-                fname = "../fronthaul/result/ref/eval1_oai_dl/" + spectrum + "/frame_even.csv"
-        } else if platform == eval1_oai_ul {
-                fname = "../fronthaul/result/ref/eval1_oai_ul/" + spectrum + "/frame_even.csv"
-        } else if platform == eval1_srs_dl {
-                fname = "../fronthaul/result/ref/eval1_srs_dl/" + spectrum + "/frame_even.csv"
-        } else if platform == eval1_srs_ul {
-                fname = "../fronthaul/result/ref/eval1_srs_ul/" + spectrum + "/frame_even.csv"
-        } else if platform == eval3_oai_dl {
-		fname = "../fronthaul/result/ref/eval3_oai_dl/" + spectrum + "/frame_even.csv"
-	} else if platform == eval3_oai_ul {
-                fname = "../fronthaul/result/ref/eval3_oai_ul/" + spectrum + "/frame_even.csv"
-        } else if platform == eval3_data_ul_srs_dl {
-                fname = "../fronthaul/result/ref/eval3_ul_srs_dl/" + spectrum + "/frame_even.csv"
-        } else if platform == eval3_data_ul_srs_ul {
-                fname = "../fronthaul/result/ref/eval3_ul_srs_ul/" + spectrum + "/frame_even.csv"
-        } else {
-		fmt.Println("Invalid platform")
-		return
-	}
+	fname = "../../data/template/" + platform + "/frame_even.csv"
 
 	templateEven, err = loadFile(fname)
 	if err != nil {
@@ -240,33 +213,9 @@ func main() {
 		return
 	}
 
+	fname = "../../data/template/" + platform + "/frame_odd.csv"
+
 	var templateOdd [][]string
-	if platform == srs {
-		fname = "../fronthaul/result/ref/srs/" + spectrum + "/frame_odd.csv"
-	} else if platform == oai {
-		fname = "../fronthaul/result/ref/oai/" + spectrum + "/frame_odd.csv"
-	} else if platform == vari {
-                fname = "../fronthaul/result/ref/var/" + spectrum + "/frame_odd.csv"
-	} else if platform == eval1_oai_dl {
-                fname = "../fronthaul/result/ref/eval1_oai_dl/" + spectrum + "/frame_odd.csv"
-        } else if platform == eval1_oai_ul {
-                fname = "../fronthaul/result/ref/eval1_oai_ul/" + spectrum + "/frame_odd.csv"
-        } else if platform == eval1_srs_dl {
-                fname = "../fronthaul/result/ref/eval1_srs_dl/" + spectrum + "/frame_odd.csv"
-        } else if platform == eval1_srs_ul {
-                fname = "../fronthaul/result/ref/eval1_srs_ul/" + spectrum + "/frame_odd.csv"
-        } else if platform == eval3_oai_dl {
-                fname = "../fronthaul/result/ref/eval3_oai_dl/" + spectrum + "/frame_odd.csv"
-        } else if platform == eval3_oai_ul {
-                fname = "../fronthaul/result/ref/eval3_oai_ul/" + spectrum + "/frame_odd.csv"
-        } else if platform == eval3_data_ul_srs_dl {
-                fname = "../fronthaul/result/ref/eval3_ul_srs_dl/" + spectrum + "/frame_odd.csv"
-        } else if platform == eval3_data_ul_srs_ul {
-                fname = "../fronthaul/result/ref/eval3_ul_srs_ul/" + spectrum + "/frame_odd.csv"
-        } else {
-		fmt.Println("Invalid platform")
-		return
-	}
 
 	templateOdd, err = loadFile(fname)
 	if err != nil {
@@ -275,7 +224,7 @@ func main() {
 	}
 
 	var csvFiles []string
-	err = filepath.Walk("../../go/fronthaul/result/split", func(path string, info os.FileInfo, err error) error {
+	err = filepath.Walk("../../data/prb_bitmaps/split", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -323,7 +272,7 @@ func main() {
 		fmt.Printf("File: %s, Diff Rate: %f, Frame Round: %d, Frame ID: %s, Subframe ID: %s, Slot ID: %s, Symbol ID: %s, Timestamp: %s\n", entry.filename, entry.diffRate, entry.frameRound, entry.frameID, entry.subframeID, entry.slotID, entry.startSymbolID, entry.timestamp)
 	}
 
-	file, err := os.Create("../fronthaul/result/tstamp/candidate.csv")
+	file, err := os.Create("../../data/candidate/candidate.csv")
 	if err != nil {
 		fmt.Println("Error creating file:", err)
 		return
