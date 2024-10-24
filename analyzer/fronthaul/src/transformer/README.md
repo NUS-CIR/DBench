@@ -1,5 +1,4 @@
-Transform PRBs into bitmaps 
-===
+# PRB Bitmap Transformer
 
 This tool analyzes fronthaul traffic captured at the Radio Unit (RU) and identifies packets with non-zero Physical Resource Blocks (PRBs), which likely contain data traffic.
 If the PRB contains non-zero value, we mark the corresponding bit in the bitmap, hinting that there can be data traffic within this PRB.
@@ -29,6 +28,7 @@ Ensure Python 3 is installed.
 1. **Extract PRB Data**: Run the Go script to extract non-zero PRB packets from the .pcap file:  
 
     ```sh
+    cd transformer
     go run prb_bitmap.go
     ```
 
