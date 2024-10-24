@@ -30,6 +30,6 @@ DBench has been evaluated on an academic open RAN testbed with several use cases
 
 For questions, feedback, or collaboration inquiries, please reach out to:
 
-    Satis Kumar Permal: satis@comp.nus.edu.sg
-    Yixi Chen: chenyx@comp.nus.edu.sg
-    Xin Zhe KHOOI: khooixz@comp.nus.edu.sg
+    Satis Kumar Permal: satis [at] comp [dot] nus [dot] edu [dot] sg
+    Yixi Chen: chenyx [at] comp [dot] nus [dot] edu [dot] sg
+    Xin Zhe KHOOI: khooixz [at] comp [dot] nus [dot] edu [dot] sg
