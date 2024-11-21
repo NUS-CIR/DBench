@@ -326,7 +326,7 @@ if (__name__ == "__main__"):
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--size", "-s", type=int, default=DEFAULT_BUCKET_SIZE, help="Assigned bucket size, or the overall session numbers")
-    parser.add_argument("--input", "-i", type=str, default="../data/oai/", help="Input pcap file directory")
+    parser.add_argument("--input", "-i", type=str, default="../data/Eval1/oai/", help="Input pcap file directory")
     parser.add_argument("--output", "-o", type=str, default="../result/", help="Output pcap file directory")
     parser.add_argument("--ue", "-u", type=str, default=DEFAULT_UE_IP, help="UE ip")
     parser.add_argument("--plot", "-p", action="store_true", help="Enable plotting")
