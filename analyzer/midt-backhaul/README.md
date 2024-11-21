@@ -27,6 +27,11 @@ To run the script, simply use the following command:
 python3 oai-custom.py
 ```
 
+or 
+```sh
+python3 srs-custom.py
+```
+
 ### Details
 - The script processes network traffic data captured in pcap files.
 - It extracts information related to GTP control messages (GTP-C) and GTP user data messages (GTP-U).
@@ -48,4 +53,7 @@ CORE: 192.168.1.2
 
 #### Default Values
 Bucket Size: 30000
-UE IP: 12.1.1.161
+- OAI
+    UE IP: 12.1.1.161
+- SRS
+    UE IP: 12.1.1.11
