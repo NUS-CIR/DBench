@@ -26,6 +26,15 @@ DBench has been evaluated on an academic open RAN testbed with several use cases
 
 ## Citation
 
+```biblatex
+@inproceedings{2024-5GMeMU-DBench,
+    author = {Satis Kumar Permal and Yixi Chen and Xin Zhe Khooi and Biqing Qiu and Mun Choon Chan},
+    title = {{Towards Continuous Latency Monitoring through Open RAN Interfaces}},
+    year = {2024},
+    booktitle = {Proceedings of the 4th ACM Workshop on 5G and Beyond Network Measurements, Modeling, and Use Cases},
+}
+```
+
 ## Contact
 
 For questions, feedback, or collaboration inquiries, please reach out to:
