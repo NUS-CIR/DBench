@@ -36,8 +36,8 @@ IP_ADDR_UPF = "192.168.70.134"
 IP_ADDR_EXT = "192.168.1.5"
 IP_ADDR_CORE = "192.168.1.2"
 
-DEFAULT_BUCKET_SIZE = 30000
-DEFAULT_UE_IP = "12.1.1.3"
+DEFAULT_BUCKET_SIZE = 2000
+DEFAULT_UE_IP = "12.1.1.33"
 
 AES_KEY_HEX = "a6ab60d579927949ae59299b4b948f98"
 
@@ -154,36 +154,8 @@ def parse_gtp(pkt, udp_port: int):
 
 def main(bucket_size: int, input_loc: str, output_loc: str, ue_ip: str, enable_plot: bool):
     # Data preparation
-    CORE_FILENAME = "core.pcap"
-    GNB_FILENAME = "gnb.pcap"
-    CORE_SRC_FNAMES = [input_loc+"UE-*.pcap"]
-   # CORE_SRC_FNAMES = [input_loc+"OAI-RU-ue-enc.pcap"]
-    REAL_CORE_SRCS = []
-    GNB_SRC_FNAMES = [input_loc+"Tofino-*.pcap"]
-   # GNB_SRC_FNAMES = [input_loc+"OAI-RU-zeus-enc.pcap"]
-    REAL_GNB_SRCS = []
-    ## create core pcap if necessary
-    if (not os.path.isfile(input_loc+CORE_FILENAME)):
-        for core_src_fname in CORE_SRC_FNAMES:
-            fnames = glob(core_src_fname)
-            if (not fnames):
-                logging.error("Cannot find necessary input file: " + core_src_fname)
-                exit(1)
-            else:
-                REAL_CORE_SRCS.append(fnames[0])
-        args = ["mergecap", "-w", input_loc+CORE_FILENAME] + REAL_CORE_SRCS
-        subprocess.run(args, check=True)
-    ## Same for gnb
-    if (not os.path.isfile(input_loc+GNB_FILENAME)):
-        for gnb_src_fname in GNB_SRC_FNAMES:
-            fnames = glob(gnb_src_fname)
-            if (not fnames):
-                logging.error("Cannot find necessary input file: " + gnb_src_fname)
-                exit(1)
-            else:
-                REAL_GNB_SRCS.append(fnames[0])
-        args = ["mergecap", "-w", input_loc+GNB_FILENAME] + REAL_GNB_SRCS
-        subprocess.run(args, check=True)
+    UE_FNAME = "ue.pcap"
+    SW_FNAME = "sw.pcap"
 
     # UE - DU - CU - UPF - EXT - UPF - CU - DU - UE
     # --(0)--(1)--(2)---(3)---(4)---(5)--(6)--(7)--
@@ -191,33 +163,12 @@ def main(bucket_size: int, input_loc: str, output_loc: str, ue_ip: str, enable_p
     # pcap_writer = PcapWriter('ip_pkt.pcap', append=True, sync=True)
 
     # First fill in the core part
-    with PcapReader(input_loc+CORE_FILENAME) as pcap_reader:
+    with PcapReader(input_loc+UE_FNAME) as pcap_reader:
         for i, packet in enumerate(pcap_reader):
             try:
                 if (IP in packet):
                     sip = packet[IP].src
                     dip = packet[IP].dst
-                    '''
-                    if (UDP in packet):
-                        if (packet[UDP].sport == packet[UDP].dport and packet[UDP].dport == UDP_PORT_N3):
-                            seq = parse_gtp(packet, UDP_PORT_N3)
-                            if (seq > bucket_size):
-                                logging.debug("ICMP seq " + str(seq) + " greater than bucket size " + str(bucket_size))
-                                continue
-                            if (seq <= 0):
-                                logging.error("Cannot find ICMP seq in GTP packets within core!")
-                                continue
-                            else:
-                                idx = seq - 1
-                                if (sip == IP_ADDR_CU and dip == IP_ADDR_UPF):
-                                    if (buckets[idx][2] == 0):
-                                        buckets[idx][2] = packet.time * 1000
-                                elif (sip == IP_ADDR_UPF and dip == IP_ADDR_CU):
-                                    if (buckets[idx][5] == 0):
-                                        buckets[idx][5] = packet.time * 1000
-                                else:
-                                    logging.debug("GTP in core with random SIP: " + sip + ", DIP: " + dip)
-                    '''
                     if (ICMP in packet):
                         idx = packet[ICMP].seq - 1
                         if (idx > bucket_size):
@@ -250,7 +201,7 @@ def main(bucket_size: int, input_loc: str, output_loc: str, ue_ip: str, enable_p
                 break
 
     # Then fill in the gnb part
-    with PcapReader(input_loc+GNB_FILENAME) as pcap_reader:
+    with PcapReader(input_loc+SW_FNAME) as pcap_reader:
         for i, packet in enumerate(pcap_reader):
             try:
                 if (IP in packet):
@@ -281,13 +232,7 @@ def main(bucket_size: int, input_loc: str, output_loc: str, ue_ip: str, enable_p
                                             buckets[idx][5] = packet.time * 1000
                                     elif (sip == IP_ADDR_CU_DL and dip == IP_ADDR_DU):
                                         if (buckets[idx][6] == 0):
-                                            buckets[idx][6] = packet.time * 1000
-                                        '''
-                                        if (buckets[idx][6] == 0 and buckets[idx][5] > 0):
-                                            candidate_time = packet.time * 1000
-                                            if (candidate_time > buckets[idx][5]):
-                                                buckets[idx][6] = candidate_time
-                                        '''                              
+                                            buckets[idx][6] = packet.time * 1000                          
                                     else:
                                         logging.debug("GTP in gnb with random SIP: " + sip + ", DIP: " + dip)
 
@@ -345,17 +290,6 @@ def main(bucket_size: int, input_loc: str, output_loc: str, ue_ip: str, enable_p
         logging.error("Sample size = 0!")
 
     logging.info("--- Average UL Latencies ---")
-    logging.info("### [ DU  ] ###")
-    if (avg_process_times[0] > 0):
-        logging.info("Average Process Time: " + '{0:.{1}f}'.format(avg_process_times[0], 4))
-        logging.info("Maximum Process Time: " + '{0:.{1}f}'.format(max(process_times[0]), 4))
-        if (enable_plot):
-            dist_draw(statistics=process_times[0], title_name="Uplink DU", file_loc=output_loc+"DU-UL-latencies.png")
-        else:
-            pickle.dump(process_times[0], open(output_loc+"DU-UL-latencies.pkl", "wb"))
-    logging.info("Bad Result Rate: " + '{0:.{1}f}'.format(bad_sample_rate[0]/sample_size, 4))
-    logging.info("Empty Result Rate: " + '{0:.{1}f}'.format(empty_sample_rate[0]/sample_size, 4))
-
     logging.info("### [ CU  ] ###")
     if (avg_process_times[1] > 0):
         logging.info("Average Process Time: " + '{0:.{1}f}'.format(avg_process_times[1], 4))
@@ -389,18 +323,6 @@ def main(bucket_size: int, input_loc: str, output_loc: str, ue_ip: str, enable_p
 
     logging.info("---------------------")
     logging.info("--- Average DL Latencies ---")
-
-    logging.info("### [ DU  ] ###")
-    if (avg_process_times[6] > 0):
-        logging.info("Average Process Time: " + '{0:.{1}f}'.format(avg_process_times[6], 4))
-        logging.info("Maximum Process Time: " + '{0:.{1}f}'.format(max(process_times[6]), 4))
-        if (enable_plot):
-            dist_draw(statistics=process_times[6], title_name="Downlink DU", file_loc=output_loc+"DU-DL-latencies.png")
-        else:
-            pickle.dump(process_times[6], open(output_loc+"DU-DL-latencies.pkl", "wb"))
-    logging.info("Bad Result Rate: " + '{0:.{1}f}'.format(bad_sample_rate[6]/sample_size, 4))
-    logging.info("Empty Result Rate: " + '{0:.{1}f}'.format(empty_sample_rate[6]/sample_size, 4))
-        
     logging.info("### [ CU  ] ###")
     if (avg_process_times[5] > 0):
         logging.info("Average Process Time: " + '{0:.{1}f}'.format(avg_process_times[5], 4))
@@ -426,18 +348,12 @@ def main(bucket_size: int, input_loc: str, output_loc: str, ue_ip: str, enable_p
 
 
 if (__name__ == "__main__"):
-    logging.basicConfig(level=logging.DEBUG)
-
-    bucket_size = DEFAULT_BUCKET_SIZE
-    input_loc="../data/default/data.pcap"
-    output_loc="../image/eval_result/default/"
-    ue_ip = DEFAULT_UE_IP
-
+    logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--size", "-s", type=int, default=DEFAULT_BUCKET_SIZE, help="Assigned bucket size, or the overall session numbers")
-    parser.add_argument("--input", "-i", type=str, default="../../data/default/", help="Input pcap file directory")
-    parser.add_argument("--output", "-o", type=str, default="../../image/eval_result/default/", help="Output pcap file directory")
+    parser.add_argument("--input", "-i", type=str, default="../data/oai/", help="Input pcap file directory")
+    parser.add_argument("--output", "-o", type=str, default="../result/", help="Output pcap file directory")
     parser.add_argument("--ue", "-u", type=str, default=DEFAULT_UE_IP, help="UE ip")
     parser.add_argument("--plot", "-p", action="store_true", help="Enable plotting")
 

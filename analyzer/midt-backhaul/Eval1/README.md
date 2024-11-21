@@ -17,7 +17,7 @@ Ensure the following dependencies are installed:
 #### Python Dependencies
 
 ```sh
-pip install scapy matplotlib numpy
+pip3 install scapy matplotlib numpy
 ```
 
 ### Usage
