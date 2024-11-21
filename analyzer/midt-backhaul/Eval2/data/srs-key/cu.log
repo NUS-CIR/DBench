@@ -1,0 +1,6 @@
+2024-07-26T09:02:19.749695 [CU      ] [W] DRM KMS polling is enabled, which may hinder performance. You can disable it using the "srsran_performance" script
+2024-07-26T09:02:21.416313 [APP     ] [D] Stdin has data to read
+2024-07-26T09:02:21.416317 [APP     ] [D] read 2 B from stdin
+2024-07-26T09:02:38.400974 [NGAP    ] [W] ue=0 ran_ue=0 amf_ue=1: PDU session setup timer expired after 3000ms. Requesting UE release
+2024-07-26T09:12:26.336678 [APP     ] [D] Stdin has data to read
+2024-07-26T09:12:26.336682 [APP     ] [D] read 2 B from stdin
