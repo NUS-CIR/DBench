@@ -1,17 +1,5 @@
-# This is a spin-off from gtp-ogre, it aims to provide more resilient from interference from different pcaps
-# We only combine necessary pcaps to refer different fields, mainly because some file corrupts the pattern under certain conditions
-# For example, for ping size larger than 256B, the CU pcap start to corrupt the UPF pattern.
-# As for performance optimization, it could also benefit since we are now using only smaller pcaps at a time
-# Example usage: python3 gcustoms.py 600 ../data/default/data.pcap ../image/eval_result/default/ 12.1.1.2
-
 import argparse
-import csv
-import ipaddress
 import logging
-import math
-import os
-import subprocess
-import glob
 import pickle
 
 from scapy.all import *

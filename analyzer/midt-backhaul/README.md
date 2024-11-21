@@ -1,6 +1,6 @@
-# OAI Custom Script
+# OAI/SRS Parser Script
 
-The `oai-custom.py` script is designed to analyze and process 5G protocol data, specifically focusing on GTP control messages (GTP-C) and GTP user data messages (GTP-U). It includes functionalities for plotting and analyzing network traffic data.
+The `oai-parser.py`/`srs-parser.py` script is designed to analyze and process 5G protocol data, specifically focusing on GTP control messages (GTP-C) and GTP user data messages (GTP-U). It includes functionalities for plotting and analyzing network traffic data.
 
 There is a need to separate the pcap parsing functionality for different 5G stacks like OAI and SRS. The thing is, these 5G stacks each support different 5G structures. For examples, as we already configured now, with the usage of CU split, the endpoint responsible for each part of the transmission is under lots of changes given different 5G configuration. In order to easily separate these usage available on different stack, here we simply craft scripts tailored to each stack's functionality.
 
@@ -24,12 +24,12 @@ pip install scapy matplotlib numpy
 To run the script, simply use the following command:
 
 ```sh
-python3 oai-custom.py
+python3 oai-parser.py
 ```
 
 or 
 ```sh
-python3 srs-custom.py
+python3 srs-parser.py
 ```
 
 ### Details
