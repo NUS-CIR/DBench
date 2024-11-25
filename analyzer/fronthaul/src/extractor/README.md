@@ -26,7 +26,7 @@ go get github.com/google/gopacket/pcap
 
     ```sh
     cd extractor
-    go run timestamp.go -pcap ../../data/eval1/raw/ue.pcap -response -find_ru
+    go run timestamp.go -pcap ../../data/eval1/oai/ue.pcap -response -find_ru
     ```
 
     **Output**:
@@ -36,20 +36,20 @@ go get github.com/google/gopacket/pcap
 - If you want to get RU delay:
   - Uplink data:
   ```sh
-  go run match.go -pcap ../../data/eval1/raw/ue.pcap -request -smaller -find_ru
+  go run timestamp.go -pcap ../../data/eval1/oai/ue.pcap -request -smaller -find_ru
   ```
   - Downlink data:
   ```sh
-  go run match.go -pcap ../../data/eval1/raw/ue.pcap -response -find_ru
+  go run timestamp.go -pcap ../../data/eval1/oai/ue.pcap -response -find_ru
   ```
 - If you want DU delay instead:
   - Uplink data:
   ```sh
-  go run match.go -pcap ../../data/eval1/raw/sw.pcap -request
+  go run timestamp.go -pcap ../../data/eval1/oai/sw.pcap -request
   ```
   - Downlink data:
   ```sh
-  go run match.go -pcap ../../data/eval1/raw/sw.pcap -response -smaller
+  go run timestamp.go -pcap ../../data/eval1/oai/sw.pcap -response -smaller
   ```
 
 #### Details
