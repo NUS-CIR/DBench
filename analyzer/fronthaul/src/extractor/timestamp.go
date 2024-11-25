@@ -201,7 +201,7 @@ func main() {
 			return
 		}
 	}
-	fmt.Println("Results saved to %s", *outputloc)
+	fmt.Println("Results saved to", *outputloc)
 
 }
 

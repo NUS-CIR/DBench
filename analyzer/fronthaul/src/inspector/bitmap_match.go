@@ -15,24 +15,17 @@ import (
 type StackPlatform string
 
 const (
-	SRS                  = "srs"
-	OAI                  = "oai"
-	vari                 = "vari"
-	eval1_oai_dl         = "eval1_oai_dl"
-	eval1_oai_ul         = "eval1_oai_ul"
-	eval1_srs_dl         = "eval1_srs_dl"
-	eval1_srs_ul         = "eval1_srs_ul"
-	eval3_oai_dl         = "eval3_oai_dl"
-	eval3_oai_ul         = "eval3_oai_ul"
-	eval3_data_ul_srs_dl = "eval3_data_ul_srs_dl"
-	eval3_data_ul_srs_ul = "eval3_data_ul_srs_ul"
+	SRS_Eval1 = "srs_eval1"
+	OAI_Eval1 = "oai_eval1"
+	SRS_Eval3 = "srs_eval3"
+	OAI_Eval3 = "oai_eval3"
 )
 
 const (
 	K              = 20
 	symbolPerFrame = 280
 	prbPerSymbol   = 273
-	platform       = OAI
+	platform       = OAI_Eval3
 )
 
 type Entry struct {

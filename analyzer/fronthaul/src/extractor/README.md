@@ -33,7 +33,7 @@ go get github.com/google/gopacket/pcap
     This script generates latency measurements based on the comparison of PRB candidates and the reference pcap file, output as a file `result.csv`.
 
 ### Notes
-- If you want to get RU delay:
+- To get RU delay:
   - Uplink data:
   ```sh
   go run timestamp.go -pcap ../../data/eval1/oai/ue.pcap -request -smaller -find_ru
@@ -41,15 +41,6 @@ go get github.com/google/gopacket/pcap
   - Downlink data:
   ```sh
   go run timestamp.go -pcap ../../data/eval1/oai/ue.pcap -response -find_ru
-  ```
-- If you want DU delay instead:
-  - Uplink data:
-  ```sh
-  go run timestamp.go -pcap ../../data/eval1/oai/sw.pcap -request
-  ```
-  - Downlink data:
-  ```sh
-  go run timestamp.go -pcap ../../data/eval1/oai/sw.pcap -response -smaller
   ```
 
 #### Details
